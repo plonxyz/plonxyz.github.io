@@ -16,12 +16,12 @@
             </div>
             <div class="card-body">
                 <h5 class="card-title">1. Modify config.txt</h5>
-                <p class="card-text">Add the following lines to <code>config.txt</code>:</p>
+                <p class="card-text">Add the following lines to <code>/boot/firmware/config.txt</code>:</p>
                 <pre class="bg-light p-2"><code>enable_uart=1
 dtparam=uart0_console</code></pre>
                 
                 <h5 class="card-title mt-4">2. Modify cmdline.txt</h5>
-                <p class="card-text">Add the following to <code>cmdline.txt</code>:</p>
+                <p class="card-text">Add the following to <code>/boot/firmware/cmdline.txt</code>:</p>
                 <pre class="bg-light p-2"><code>console=serial0,115200</code></pre>
             </div>
         </div>
