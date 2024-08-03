@@ -1,55 +1,114 @@
-<script>
-    const output = document.getElementById('output');
-    const input = document.getElementById('input');
-    const prompt = document.getElementById('prompt');
-
-    function addToTerminal(text, newLine = true) {
-        output.innerHTML += text + (newLine ? '\n' : '');
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-    input.addEventListener('keyup', function(event) {
-        if (event.key === 'Enter') {
-            const command = input.value;
-            addToTerminal(`${prompt.textContent} ${command}`);
-            processCommand(command);
-            input.value = '';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>plon.xyz Bash Shell</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #300a24;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
         }
-    });
-
-    function processCommand(command) {
-        switch(command.toLowerCase()) {
-            case 'help':
-                addToTerminal('Available commands: help, date, clear, whoami, ls, pwd, uname -a');
-                break;
-            case 'date':
-                addToTerminal(new Date().toString());
-                break;
-            case 'clear':
-                output.innerHTML = '';
-                break;
-            case 'whoami':
-                addToTerminal('user');
-                break;
-            case 'ls':
-                addToTerminal('documents  images  projects');
-                break;
-            case 'pwd':
-                addToTerminal('/home/user');
-                break;
-            case 'uname -a':
-                addToTerminal('Linux plonxyz 6.1.0-18-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.76-1 (2024-02-01) x86_64 GNU/Linux');
-                break;
-            default:
-                addToTerminal(`bash: ${command}: command not found`);
+        #terminal {
+            height: 100%;
+            overflow-y: auto;
+            padding: 10px;
+            box-sizing: border-box;
         }
-    }
+        #output {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        #input-line {
+            display: flex;
+            align-items: center;
+        }
+        #prompt {
+            color: #4e9a06;
+            margin-right: 5px;
+        }
+        #input {
+            flex-grow: 1;
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <div id="output"></div>
+        <div id="input-line">
+            <span id="prompt">user@plon:~$</span>
+            <input type="text" id="input" autofocus>
+        </div>
+    </div>
 
-    const asciiArt = `
-       /$$                                                      
-      | $$                                                      
-/$$$$$$ | $$  /$$$$$$  /$$$$$$$      /$$   /$$ /$$   /$$ /$$$$$$$$
-/$$__  $$| $$ /$$__  $$| $$__  $$    |  $$ /$$/| $$  | $$|____ /$$/
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const output = document.getElementById('output');
+        const input = document.getElementById('input');
+        const prompt = document.getElementById('prompt');
+
+        if (!output || !input || !prompt) {
+            console.error('One or more required elements are missing');
+            return;
+        }
+
+        function addToTerminal(text, newLine = true) {
+            output.innerHTML += text + (newLine ? '\n' : '');
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        input.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                const command = input.value;
+                addToTerminal(`${prompt.textContent} ${command}`);
+                processCommand(command);
+                input.value = '';
+            }
+        });
+
+        function processCommand(command) {
+            switch(command.toLowerCase()) {
+                case 'help':
+                    addToTerminal('Available commands: help, date, clear, whoami, ls, pwd, uname -a');
+                    break;
+                case 'date':
+                    addToTerminal(new Date().toString());
+                    break;
+                case 'clear':
+                    output.innerHTML = '';
+                    break;
+                case 'whoami':
+                    addToTerminal('user');
+                    break;
+                case 'ls':
+                    addToTerminal('documents  images  projects');
+                    break;
+                case 'pwd':
+                    addToTerminal('/home/user');
+                    break;
+                case 'uname -a':
+                    addToTerminal('Linux plon 6.1.0-18-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.76-1 (2024-02-01) x86_64 GNU/Linux');
+                    break;
+                default:
+                    addToTerminal(`bash: ${command}: command not found`);
+            }
+        }
+
+        const asciiArt = `
+           /$$                                                      
+          | $$                                                      
+  /$$$$$$ | $$  /$$$$$$  /$$$$$$$      /$$   /$$ /$$   /$$ /$$$$$$$$
+ /$$__  $$| $$ /$$__  $$| $$__  $$    |  $$ /$$/| $$  | $$|____ /$$/
 | $$  \\ $$| $$| $$  \\ $$| $$  \\ $$     \\  $$$$/ | $$  | $$   /$$$$/ 
 | $$  | $$| $$| $$  | $$| $$  | $$      >$$  $$ | $$  | $$  /$$__/  
 | $$$$$$$/| $$|  $$$$$$/| $$  | $$ /$$ /$$/\\  $$|  $$$$$$$ /$$$$$$$$
@@ -59,7 +118,10 @@
 |__/                                             \\______/           
 `;
 
-    addToTerminal(asciiArt);
-    addToTerminal('Welcome to plon.xyz Shell');
-    addToTerminal('Type "help" for available commands\n');
-</script>
+        addToTerminal(asciiArt);
+        addToTerminal('Welcome to plon.xyz Bash Shell');
+        addToTerminal('Type "help" for available commands\n');
+    });
+    </script>
+</body>
+</html>
