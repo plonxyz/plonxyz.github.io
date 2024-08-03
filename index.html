@@ -1,102 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>plon.xyz Console</title>
-    <style>
-        body {
-            background-color: #000;
-            color: #0f0;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 20px;
-        }
-        #console {
-            width: 100%;
-            height: 500px;
-            background-color: #000;
-            border: 1px solid #0f0;
-            overflow-y: scroll;
-            padding: 10px;
-            box-sizing: border-box;
-            white-space: pre;
-        }
-        #input {
-            width: 100%;
-            background-color: #000;
-            border: 1px solid #0f0;
-            color: #0f0;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 5px;
-            margin-top: 10px;
-        }
-        .prompt::before {
-            content: "$ ";
-        }
-    </style>
-</head>
-<body>
-    <div id="console"></div>
-    <input type="text" id="input" placeholder="Enter command...">
+<script>
+    const output = document.getElementById('output');
+    const input = document.getElementById('input');
+    const prompt = document.getElementById('prompt');
 
-    <script>
-        const console = document.getElementById('console');
-        const input = document.getElementById('input');
+    function addToTerminal(text, newLine = true) {
+        output.innerHTML += text + (newLine ? '\n' : '');
+        window.scrollTo(0, document.body.scrollHeight);
+    }
 
-        function addToConsole(text, isCommand = false) {
-            const line = document.createElement('div');
-            line.textContent = text;
-            if (isCommand) {
-                line.classList.add('prompt');
-            }
-            console.appendChild(line);
-            console.scrollTop = console.scrollHeight;
+    input.addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            const command = input.value;
+            addToTerminal(`${prompt.textContent} ${command}`);
+            processCommand(command);
+            input.value = '';
         }
+    });
 
-        input.addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                const command = input.value;
-                addToConsole(command, true);
-                processCommand(command);
-                input.value = '';
-            }
-        });
-
-        function processCommand(command) {
-            switch(command.toLowerCase()) {
-                case 'help':
-                    addToConsole('Available commands: help, date, clear');
-                    break;
-                case 'date':
-                    addToConsole(new Date().toString());
-                    break;
-                case 'clear':
-                    document.getElementById('console').innerHTML = '';
-                    break;
-                default:
-                    addToConsole(`Command not found: ${command}`);
-            }
+    function processCommand(command) {
+        switch(command.toLowerCase()) {
+            case 'help':
+                addToTerminal('Available commands: help, date, clear, whoami, ls, pwd, uname -a');
+                break;
+            case 'date':
+                addToTerminal(new Date().toString());
+                break;
+            case 'clear':
+                output.innerHTML = '';
+                break;
+            case 'whoami':
+                addToTerminal('user');
+                break;
+            case 'ls':
+                addToTerminal('documents  images  projects');
+                break;
+            case 'pwd':
+                addToTerminal('/home/user');
+                break;
+            case 'uname -a':
+                addToTerminal('Linux plonxyz 6.1.0-18-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.76-1 (2024-02-01) x86_64 GNU/Linux');
+                break;
+            default:
+                addToTerminal(`bash: ${command}: command not found`);
         }
+    }
 
-        const asciiArt = `
-
-           /$$                                                      
-          | $$                                                      
-  /$$$$$$ | $$  /$$$$$$  /$$$$$$$      /$$   /$$ /$$   /$$ /$$$$$$$$
- /$$__  $$| $$ /$$__  $$| $$__  $$    |  $$ /$$/| $$  | $$|____ /$$/
+    const asciiArt = `
+       /$$                                                      
+      | $$                                                      
+/$$$$$$ | $$  /$$$$$$  /$$$$$$$      /$$   /$$ /$$   /$$ /$$$$$$$$
+/$$__  $$| $$ /$$__  $$| $$__  $$    |  $$ /$$/| $$  | $$|____ /$$/
 | $$  \\ $$| $$| $$  \\ $$| $$  \\ $$     \\  $$$$/ | $$  | $$   /$$$$/ 
 | $$  | $$| $$| $$  | $$| $$  | $$      >$$  $$ | $$  | $$  /$$__/  
-| $$$$$$$/| $$|  $$$$$$/| $$  | $$ /$$ /$$/\  $$|  $$$$$$$ /$$$$$$$$
-| $$____/ |__/ \______/ |__/  |__/|__/|__/  \__/ \____  $$|________/
+| $$$$$$$/| $$|  $$$$$$/| $$  | $$ /$$ /$$/\\  $$|  $$$$$$$ /$$$$$$$$
+| $$____/ |__/ \\______/ |__/  |__/|__/|__/  \\__/ \\____  $$|________/
 | $$                                             /$$  | $$          
 | $$                                            |  $$$$$$/          
 |__/                                             \\______/           
-
 `;
 
-        addToConsole(asciiArt);
-        addToConsole('Welcome to the plon.xyz Console');
-        addToConsole('Type "help" for available commands');
-    </script>
-</body>
-</html>
+    addToTerminal(asciiArt);
+    addToTerminal('Welcome to plon.xyz Shell');
+    addToTerminal('Type "help" for available commands\n');
+</script>
